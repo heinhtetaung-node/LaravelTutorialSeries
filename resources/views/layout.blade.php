@@ -8,6 +8,7 @@
 		<tr>
 			<td><a href="{{ url('/') }}">Home</a></td>
 			<td><a href="{{ route('photos.index') }}">Photos</a></td>
+			<td><a href="{{ route('gallery.index') }}">Gallery</a></td>
 		</tr>		
 	</table>	
       

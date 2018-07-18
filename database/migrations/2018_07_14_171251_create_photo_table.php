@@ -18,7 +18,9 @@ class CreatePhotoTable extends Migration
             $table->increments('id');
             $table->string('photoname');
             $table->string('description');            
-            $table->timestamps();
+            $table->unsignedInteger('gallery_id');
+            $table->foreign('gallery_id')->references('id')->on('gallery');           
+            $table->timestamps();            
         });
     }
 
@@ -30,6 +32,7 @@ class CreatePhotoTable extends Migration
     public function down()
     {
         //
+        //Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('photos');
     }
 }

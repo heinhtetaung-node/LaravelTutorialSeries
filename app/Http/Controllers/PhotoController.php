@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Photo;
+use App\Model\Gallery;
 use Validator;
 
 class PhotoController extends Controller
@@ -15,8 +16,15 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        //
-        $datas = Photo::latest()->get();
+        // 
+        // 1st way 
+        // $datas = Photo::latest()->with('gallery')->get();
+
+        // 2nd way
+        $datas = Photo::selectRaw('photos.*, gallery.galleryname AS galleryname')
+                        ->leftJoin('gallery', 'gallery.id', '=', 'photos.gallery_id')
+                        ->latest()->get();
+
         return view('photo_list',  ['datas' => $datas]);
     }
 
@@ -32,7 +40,8 @@ class PhotoController extends Controller
     public function create()
     {
         //
-        return view('photo_create');
+        $datas = Gallery::latest()->get();
+        return view('photo_create', ['gallery' => $datas]);
     }
 
     /**
@@ -65,6 +74,7 @@ class PhotoController extends Controller
 
         $photo->photoname = $photoname;
         $photo->description = $description;
+        $photo->gallery_id = $request->get('gallery_id');
         $res = $photo->save();        
         return redirect()->route('photos.index');
     }
@@ -91,7 +101,9 @@ class PhotoController extends Controller
         //
         $photo = Photo::findOrFail($id);
         //var_dump(compact('photo')); exit;
-        return view('photo_edit', ['photo' => $photo]);        
+        $galleryoptions = Gallery::latest()->get();        
+
+        return view('photo_edit', ['photo' => $photo, 'gallery' => $galleryoptions]);        
     }
 
     /**

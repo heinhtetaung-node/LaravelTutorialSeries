@@ -15,14 +15,17 @@ class PhotoTableSeeder extends Seeder
         DB::table('photos')->insert([
         	[
             	'photoname' => 'photo1',
+                'gallery_id' => 1,
             	'description' => 'photo description'
         	],
         	[
         		'photoname' => 'photo2',
+                'gallery_id' => 2,
             	'description' => 'photo description2'
         	],
         	[
         		'photoname' => 'photo3',
+                'gallery_id' => 3,
             	'description' => 'photo description3'
         	]
     	]);

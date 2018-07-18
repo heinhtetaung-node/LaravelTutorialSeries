@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Photo;
+use App\Model\Gallery;
+use Validator;
 
 class GalleryController extends Controller
 {
@@ -14,12 +17,8 @@ class GalleryController extends Controller
     public function index()
     {
         //
-        echo "galley";
-    }
-
-    public function showphotos(){
-        echo "showphots test for as route";
-        echo route('gallery.showphotos');
+        $datas = Gallery::latest()->get();
+        return view('gallery_list',  ['datas' => $datas]);
     }
 
     /**
@@ -30,6 +29,7 @@ class GalleryController extends Controller
     public function create()
     {
         //
+        return view('gallery_create');
     }
 
     /**
@@ -41,6 +41,29 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         //
+        $galleryname = $request->input('galleryname');
+        $gallerydescription = $request->input('gallerydescription');
+        $gallery = new Gallery();
+        if($request->has('id')){
+            $gallery = Gallery::findOrFail($request->input('id'));
+        }
+
+        $validator = Validator::make($request->all(), [
+            'galleryname' => 'required|max:100',
+            'gallerydescription' => 'required|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            //echo "false"; exit;
+            return redirect()->back()
+              ->withInput()
+              ->withErrors($validator); 
+        }
+
+        $gallery->galleryname = $galleryname;
+        $gallery->gallerydescription = $gallerydescription;
+        $res = $gallery->save();        
+        return redirect()->route('gallery.index');
     }
 
     /**
@@ -52,7 +75,6 @@ class GalleryController extends Controller
     public function show($id)
     {
         //
-        echo $id;
     }
 
     /**
@@ -64,6 +86,9 @@ class GalleryController extends Controller
     public function edit($id)
     {
         //
+        $gallery = Gallery::findOrFail($id);
+        //var_dump(compact('photo')); exit;
+        return view('gallery_edit', ['gallery' => $gallery]);        
     }
 
     /**
@@ -87,5 +112,8 @@ class GalleryController extends Controller
     public function destroy($id)
     {
         //
+        $gallery = Gallery::findOrFail($id);
+        $gallery->delete();
+        return redirect()->route('gallery.index');
     }
 }
