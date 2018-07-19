@@ -19,22 +19,25 @@ Route::get('/foo', function () {
     return 'Hello World';
 });
 
-Route::resource('/photos', 'PhotoController');
 
-Route::get('/photo', 'PhotoController@index');
-
-Route::post('/photo/savephoto', 'PhotoController@save');
-
-
-Route::get('gallery/showphotos', [
-									'as' => 'gallery.showphotos', 
-									'uses' => 'GalleryController@showphotos'
-								  ]);
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
+	Route::resource('photos', 'PhotoController');
+	Route::resource('gallery', 'GalleryController');
+});
 
 
-Route::resource('gallery', 'GalleryController');
+// Route::get('gallery/showphotos', [
+// 									'as' => 'gallery.showphotos', 
+// 									'uses' => 'GalleryController@showphotos'
+// 								  ]);
 
 
 
 
 
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -49,3 +49,18 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+
+
+
+
+
+-------- Creating Authentication And Middleware -----------
+1. php artisan make:auth
+2. add prefix to our admin route (prefix is a kind of group backend or frontend)
+3. add middleware to our routes (first just add default middleware auth)
+4. create middleware IsAdmin that can access only admin and, add this to admin routes
+	php artisan make:middleware IsAdmin
+5. create middleware IsUser that can access only user and, add this to user routes
+6. write some user routes and test
+7. php artisan route:list and create routes userlogin and adminlogin
+8. make sure 2 middle ware redirect correct route
