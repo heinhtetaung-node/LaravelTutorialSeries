@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -36,8 +38,22 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('guest');
     }
+
+
+    // override intend to manage redirect link after registered
+    protected function registered(Request $request, $user)
+    {
+        //
+        if($user->role == '1'){
+            return redirect('admin');
+        }
+        if($user->role == '0'){
+            return redirect('profile');
+        }
+    }
+
 
     /**
      * Get a validator for an incoming registration request.
@@ -66,6 +82,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'role' => $data['role']
         ]);
+    }
+
+    public function adminregister(){
+        return view('auth.adminregister');   
     }
 }

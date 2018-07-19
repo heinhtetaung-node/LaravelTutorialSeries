@@ -20,11 +20,20 @@ Route::get('/foo', function () {
 });
 
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'admin', 'middleware' => 'IsAdmin'], function(){
 	Route::resource('photos', 'PhotoController');
 	Route::resource('gallery', 'GalleryController');
+	Route::get('/', 'PhotoController@index');
+	Route::get('register', 'Auth\RegisterController@adminregister')->name('admin.register');
 });
 
+
+Route::group(['middleware' => 'IsUser'], function(){
+	Route::get('profile', 'UserController@index')->name('profile');
+});
+
+
+Route::get('/admin/login', 'Auth\LoginController@showAdminLoginForm')->name('admin.login');
 
 // Route::get('gallery/showphotos', [
 // 									'as' => 'gallery.showphotos', 

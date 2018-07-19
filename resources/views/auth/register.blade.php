@@ -68,6 +68,7 @@
                                 </button>
                             </div>
                         </div>
+                        <input type="hidden" class="form-control" name="role" value="0">
                     </form>
                 </div>
             </div>
