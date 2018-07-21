@@ -19,7 +19,8 @@ class CreatePhotoTable extends Migration
             $table->string('photoname');
             $table->string('description');            
             $table->unsignedInteger('gallery_id');
-            $table->foreign('gallery_id')->references('id')->on('gallery');           
+            $table->foreign('gallery_id')->references('id')->on('gallery');  
+            $table->string('photourl')->default('');            
             $table->timestamps();            
         });
     }

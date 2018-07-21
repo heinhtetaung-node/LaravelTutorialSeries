@@ -7,7 +7,7 @@ use App\Model\Photo;
 use App\Model\Gallery;
 use Validator;
 
-class PhotoController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +16,11 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        // 
-        // 1st way 
-        // $datas = Photo::latest()->with('gallery')->get();
-
-        // 2nd way
         $datas = Photo::selectRaw('photos.*, gallery.galleryname AS galleryname')
                         ->leftJoin('gallery', 'gallery.id', '=', 'photos.gallery_id')
                         ->latest()->get();
 
-        return view('photo_list',  ['datas' => $datas]);
+        return view('shopping',  ['datas' => $datas]);
     }
 
     public function save(Request $req){

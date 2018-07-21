@@ -9,6 +9,7 @@
 		<thead>
 			<tr>
 				<th>Id</th>
+				<th>Photo</th>
 				<th>Gallery</th>
 				<th>Name</th>
 				<th>Description</th>
@@ -20,6 +21,7 @@
 			@foreach($datas as $d)
 				<tr>
 					<td>{{ $d->id }}</td>
+					<td><img src="{{ url($d->photourl) }}" style="width:50px"></td>
 					<td>{{ $d->galleryname }}</td>
 					<td>{{ $d->photoname }}</td>
 					<td>{{ $d->description }}</td>

@@ -35,6 +35,10 @@ Route::group(['middleware' => 'IsUser'], function(){
 
 Route::get('/admin/login', 'Auth\LoginController@showAdminLoginForm')->name('admin.login');
 
+
+Route::get('/products', 'ProductController@index')->name('products');
+
+
 // Route::get('gallery/showphotos', [
 // 									'as' => 'gallery.showphotos', 
 // 									'uses' => 'GalleryController@showphotos'

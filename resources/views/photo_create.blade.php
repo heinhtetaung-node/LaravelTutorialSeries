@@ -12,7 +12,7 @@
 		<span>{{ $errors->first('description') }}</span>
 	@endif
 
-	<form action="{{ route('photos.store') }}" method="POST"> 
+	<form  enctype="multipart/form-data"  action="{{ route('photos.store') }}" method="POST"> 
 		Name <input type="text" name="photoname" value="{{ old('photoname') }}">
 		 Description<input type="text" name="description" value="{{ old('description') }}">
 		 
@@ -23,6 +23,7 @@
 		 	@endforeach
 		 </select>
 
+		<input type="file" name="photourl" value="{{ old('photourl') }}">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<input type="submit" name="submit" value="submit">
 	</form>
