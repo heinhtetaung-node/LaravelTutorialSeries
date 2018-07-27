@@ -38,6 +38,13 @@ Route::get('/admin/login', 'Auth\LoginController@showAdminLoginForm')->name('adm
 
 Route::get('/products', 'ProductController@index')->name('products');
 
+Route::get('/addtocart/{id}', 'ProductController@addtocart')->name('addtocart');
+
+Route::get('/showcarts', 'ProductController@showcarts')->name('showcarts');
+
+Route::get('/removeprd/{index}', 'ProductController@removeprd')->name('removeprd');
+Route::get('/clearcart', 'ProductController@clearcart')->name('clearcart');
+
 
 // Route::get('gallery/showphotos', [
 // 									'as' => 'gallery.showphotos', 

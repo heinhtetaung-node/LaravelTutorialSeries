@@ -92,56 +92,88 @@ class ProductController extends Controller
         return redirect()->route('photos.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+
+    public function addtocart($id, Request $request){
+        //$id;
+
+        // check in the session product is exist or not
+        // get product array from session
+
+        // if (sessionesist)
+                // if(productexist)
+                //      go ahead quantiy pls
+                // else
+                //      just save to session
+
+                // update session
+        // else
+        //      create a new session
+        //      just save product to session 
+
+
+        // if($request->session()->has('carts')){  // checing session exist or not
+
+        // $data=$request->session()->get('carts');   // get data from session
+
+        // $request->session()->put('redirecturl', $request->redirecturl);   // save or update data in session
+
+        // $request->session()->forget('carts');   // destroy session
+
+        if($request->session()->has('carts')){
+
+            $carts=$request->session()->get('carts');
+            $key = $this->checkProductExist($carts, $id);
+            if($key!=-1){  // product exist in session
+                $carts[$key]['qty']++;
+            }else{
+                $photoarr = Photo::findOrFail($id);
+                //$photoarr = compact('photoarr');
+                array_push($carts, ['id' => $id, 'qty' => 1, 'productarr'=>['photoname'=> $photoarr->photoname, 'photourl'=>$photoarr->photourl]]);
+            }
+            $request->session()->put('carts', $carts);
+
+        }else{
+
+            $photoarr = Photo::findOrFail($id);
+            //$photoarr = compact('photoarr');
+            $carts = [['id' => $id, 'qty' => 1, 'productarr'=>['photoname'=> $photoarr->photoname, 'photourl'=>$photoarr->photourl]]];
+            $request->session()->put('carts', $carts);
+        }
+
+        return $request->session()->get('carts');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-        $photo = Photo::findOrFail($id);
-        //var_dump(compact('photo')); exit;
-        $galleryoptions = Gallery::latest()->get();        
-
-        return view('photo_edit', ['photo' => $photo, 'gallery' => $galleryoptions]);        
+    public function checkProductExist($data, $id){
+        $res = -1;
+        foreach ($data as $key => $value) {
+            if($value['id'] == $id){
+                $res = $key;
+                break;
+            }
+        }
+        return $res;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function showcarts(){
+        return view('showcarts');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-        $photo = Photo::findOrFail($id);
-        $photo->delete();
-        return redirect()->route('photos.index');
+    public function removeprd($index, Request $request){
+
+        if($request->session()->has('carts')){            
+            $carts=$request->session()->get('carts');
+            array_splice($carts, $index, 1);
+            
+            $request->session()->put('carts', $carts);
+        }
+
+        return redirect('showcarts');
+    }
+
+    public function clearcart(Request $request){
+        if($request->session()->has('carts')){            
+            $request->session()->forget('carts');   
+        }
+        return redirect('showcarts');   
     }
 }

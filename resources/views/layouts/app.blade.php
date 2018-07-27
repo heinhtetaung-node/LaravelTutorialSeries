@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">    
+    <script src="{{ asset('js/app.js') }}"></script>    
 </head>
 <body>
     <div id="app">
@@ -43,9 +44,18 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
+                        <?php $hascart = false; ?>
+                        @if(Session::has('carts'))
+                            <li><a href="{{ route('showcarts') }}">Carts <span id="cart_count">{{ count(Session::get('carts')) }}</span></a></li>
+                            <?php $hascart = true; ?>
+                        @endif
+                        <input type="hidden" value="{{ $hascart }}" id="hascart">
+                        <li id="hascartshow" style="display:none;"><a href="{{ route('showcarts') }}">Carts <span id="cart_count1"></span></a></li>
+                        
+
                         @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>                            
                         @else
                             @if (Auth::check() && Auth::user()->role==0)
                             <li class="dropdown">
@@ -69,6 +79,9 @@
                             </li>
                             @endif
                         @endif
+
+
+
                     </ul>
                 </div>
             </div>
@@ -78,7 +91,6 @@
         @yield('content')
     </div>
 
-    <!-- Scripts -->    
-    <script src="{{ asset('js/app.js') }}"></script>    
+    <!-- Scripts -->        
 </body>
 </html>
