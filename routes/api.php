@@ -18,4 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('photos', 'Api\PhotoController');
+Route::post('/signin', [
+    'uses' => 'Api\LoginController@signin',
+]);
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('/user', [
+        'uses' => 'UserController@checkToken',
+    ]);
+
+    Route::resource('photos', 'Api\PhotoController');
+});

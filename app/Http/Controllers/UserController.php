@@ -20,4 +20,13 @@ class UserController extends Controller
         return view('profile');
     }
 
+    public function checkToken(Request $request)
+    {
+        $data = [];
+        $data['name'] = $request->user()->name;
+        $data['email'] = $request->user()->email;
+        return response()->json([
+            'data' => $data,
+        ]);
+    }
 }
